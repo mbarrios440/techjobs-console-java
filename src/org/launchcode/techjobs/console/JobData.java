@@ -100,6 +100,7 @@ public class JobData {
 
                 if (col.contains(lowercaseSearchVal)) {
                     searchResults.add(job);
+                    break;
                 }
             }
         }
