@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by LaunchCode
@@ -57,12 +58,12 @@ public class JobData {
     /**
      * Returns results of search the jobs data by key/value, using
      * inclusion of the search term.
-     *
+     * <p>
      * For example, searching for employer "Enterprise" will include results
      * with "Enterprise Holdings, Inc".
      *
-     * @param column   Column that should be searched.
-     * @param value Value of teh field to search for
+     * @param column Column that should be searched.
+     * @param value  Value of teh field to search for
      * @return List of all jobs matching the criteria
      */
     public static ArrayList<HashMap<String, String>> findByColumnAndValue(String column, String value) {
@@ -74,9 +75,10 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase();
+            String lowercaseValue = value.toLowerCase();
 
-            if (aValue.contains(value)) {
+            if (aValue.contains(lowercaseValue)) {
                 jobs.add(row);
             }
         }
@@ -84,22 +86,24 @@ public class JobData {
         return jobs;
     }
 
-    public static ArrayList<HashMap<String, String>> findByValue(String column, String value) {
+    public static ArrayList<HashMap<String, String>> findByValue(String searchVal) {
 
         loadData();
 
-        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        ArrayList<HashMap<String, String>> searchResults = new ArrayList<>();
 
-        for (HashMap<String, String> row : allJobs) {
+        for (HashMap<String, String> job : allJobs) {
 
-            String aValue = row.get(column);
+            for (String column : job.keySet()) {
+                String col = job.get(column).toLowerCase();
+                String lowercaseSearchVal = searchVal.toLowerCase();
 
-            if (aValue.contains(value)) {
-                jobs.add(row);
+                if (col.contains(lowercaseSearchVal)) {
+                    searchResults.add(job);
+                }
             }
         }
-
-        return jobs;
+        return searchResults;
     }
 
     /**
